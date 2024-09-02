@@ -68,19 +68,36 @@ namespace To_Do_List
             else
             {
                 DateTime? fechaLimite = null;
-                Console.WriteLine("ingrese la fecha limite de la tarea (opcional, formato yyyy-MM-dd):");
-                string fechaEntrada = Console.ReadLine();
-                if (DateTime.TryParse(fechaEntrada, out DateTime fecha))
+                bool fechaValida = false;
+
+                // Bucle para pedir una fecha válida
+                while (!fechaValida)
                 {
-                    fechaLimite = fecha;
+                    Console.WriteLine("ingrese la fecha limite de la tarea (opcional, formato yyyy-MM-dd):");
+                    string fechaEntrada = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(fechaEntrada)) // si no se ingresa una fecha, se sale del bucle
+                    {
+                        fechaValida = true;
+                    }
+                    else if (DateTime.TryParse(fechaEntrada, out DateTime fecha)) // verifica si la fecha es válida
+                    {
+                        fechaLimite = fecha;
+                        fechaValida = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fecha no válida. Por favor, ingrese una fecha en el formato yyyy-MM-dd.");
+                    }
                 }
 
-                tareas.Add(new Tarea(nueva, fechaLimite)); // anade la nueva tarea a la lista si tiene datos la variable nueva
+                tareas.Add(new Tarea(nueva, fechaLimite)); // añade la nueva tarea a la lista si tiene datos la variable nueva
                 Console.WriteLine("se ha ingresado la tarea correctamente.");
             }
             Console.WriteLine("presiona una tecla para continuar...");
             Console.ReadKey();
         }
+
 
         public void Marcar() // metodo para marcar las tareas como completadas o incompletas
         {
